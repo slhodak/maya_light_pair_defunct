@@ -24,12 +24,9 @@ scale_fc = cmds.shadingNode(
     name="floatConstant_" + str(current_time_unix) + "_scale",
 )
 
-cmds.connectAttr(scale_fc + ".outFloat", spotlight1_transform + ".scaleX")
-cmds.connectAttr(scale_fc + ".outFloat", spotlight1_transform + ".scaleY")
-cmds.connectAttr(scale_fc + ".outFloat", spotlight1_transform + ".scaleZ")
-cmds.connectAttr(scale_fc + ".outFloat", spotlight2_transform + ".scaleX")
-cmds.connectAttr(scale_fc + ".outFloat", spotlight2_transform + ".scaleY")
-cmds.connectAttr(scale_fc + ".outFloat", spotlight2_transform + ".scaleZ")
+for scale_property in [".scaleX", ".scaleY", ".scaleZ"]:
+    cmds.connectAttr(scale_fc + ".outFloat", spotlight1_transform + scale_property)
+    cmds.connectAttr(scale_fc + ".outFloat", spotlight2_transform + scale_property)
 
 # Create float constants for radius
 radius_fc = cmds.shadingNode(
@@ -38,9 +35,33 @@ radius_fc = cmds.shadingNode(
     name="floatConstant_" + str(current_time_unix) + "_radius",
 )
 
-# Connect float constants to color temperature attributes of both spotlights
+# Connect float constants to radius attributes of both spotlights
 cmds.connectAttr(radius_fc + ".outFloat", spotlight1 + ".aiRadius")
 cmds.connectAttr(radius_fc + ".outFloat", spotlight2 + ".aiRadius")
+
+# Create float constants for cone angle
+cone_angle_fc = cmds.shadingNode(
+    "floatConstant",
+    asUtility=True,
+    name="floatConstant_" + str(current_time_unix) + "_cone_angle",
+)
+cmds.setAttr(cone_angle_fc + ".inFloat", 20)
+
+# Connect float constants to cone angle attributes of both spotlights
+cmds.connectAttr(cone_angle_fc + ".outFloat", spotlight1 + ".coneAngle")
+cmds.connectAttr(cone_angle_fc + ".outFloat", spotlight2 + ".coneAngle")
+
+# Create float constants for penumbra angle
+penumbra_angle_fc = cmds.shadingNode(
+    "floatConstant",
+    asUtility=True,
+    name="floatConstant_" + str(current_time_unix) + "_penumbra_angle",
+)
+cmds.setAttr(penumbra_angle_fc + ".inFloat", 0)
+
+# Connect float constants to penumbra angle attributes of both spotlights
+cmds.connectAttr(penumbra_angle_fc + ".outFloat", spotlight1 + ".penumbraAngle")
+cmds.connectAttr(penumbra_angle_fc + ".outFloat", spotlight2 + ".penumbraAngle")
 
 # Create float constants for color temperature
 color_temp_fc = cmds.shadingNode(
@@ -48,6 +69,7 @@ color_temp_fc = cmds.shadingNode(
     asUtility=True,
     name="floatConstant_" + str(current_time_unix) + "_temp",
 )
+cmds.setAttr(color_temp_fc + ".inFloat", 5500)
 
 # Connect float constants to color temperature attributes of both spotlights
 cmds.connectAttr(color_temp_fc + ".outFloat", spotlight1 + ".aiColorTemperature")
@@ -59,6 +81,7 @@ use_color_temp_fc = cmds.shadingNode(
     asUtility=True,
     name="floatConstant_" + str(current_time_unix) + "_useTemp",
 )
+cmds.setAttr(use_color_temp_fc + ".inFloat", 1)
 
 # Connect float constants to useColorTemperature attributes of both spotlights
 cmds.connectAttr(use_color_temp_fc + ".outFloat", spotlight1 + ".aiUseColorTemperature")
@@ -70,6 +93,7 @@ exposure_fc = cmds.shadingNode(
     asUtility=True,
     name="floatConstant_" + str(current_time_unix) + "_exposure",
 )
+cmds.setAttr(exposure_fc + ".inFloat", 8)
 
 # Connect float constants to exposure attributes of both spotlights
 cmds.connectAttr(exposure_fc + ".outFloat", spotlight1 + ".aiExposure")
