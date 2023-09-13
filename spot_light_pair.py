@@ -109,3 +109,12 @@ color_constant = cmds.shadingNode(
 # Connect color constant to color attributes of both spotlights
 cmds.connectAttr(color_constant + ".outColor", spotlight1 + ".color")
 cmds.connectAttr(color_constant + ".outColor", spotlight2 + ".color")
+
+# Connect to all RGB as well
+for rgb_channel in ["R", "G", "B"]:
+    cmds.connectAttr(
+        color_constant + f".outColor{rgb_channel}", spotlight1 + f".color{rgb_channel}"
+    )
+    cmds.connectAttr(
+        color_constant + f".outColor{rgb_channel}", spotlight2 + f".color{rgb_channel}"
+    )
